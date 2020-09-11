@@ -60,7 +60,7 @@ bool HelloWorld::init() {
 
     tableView = TableView::create(this, Size(828, 1472));
     tableView->setDirection(ScrollView::Direction::VERTICAL);
-    tableView->setPosition(Vec2(200,0));
+    tableView->setPosition(Vec2(50,0));
     tableView->setTouchEnabled(true);
     tableView->setBounceable(true);
     tableView->setDelegate(this);
@@ -160,7 +160,9 @@ cocos2d::extension::TableViewCell *HelloWorld::tableCellAtIndex(cocos2d::extensi
     if (!cell) {
         cell = new (std::nothrow) CustomTableViewCell();
         cell->autorelease();
-        cell->addChild(createSongPanel(Vec2(0,0)));
+        auto songPanel = createSongPanel(Vec2(0,0));
+        songPanel->setPosition(Vec2(songPanel->getContentSize().width/2, 0));
+        cell->addChild(songPanel);
     }
     return cell;
 }
