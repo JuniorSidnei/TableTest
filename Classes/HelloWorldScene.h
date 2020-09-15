@@ -26,8 +26,10 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include <extensions/cocos-ext.h>
-#include <cocos/ui/UIListView.h>
 #include "cocos2d.h"
+#include "FairyGUI.h"
+
+USING_NS_FGUI;
 
 class HelloWorld : public cocos2d::Scene, public cocos2d::extension::TableViewDataSource, public cocos2d::extension::TableViewDelegate
 {
@@ -38,6 +40,7 @@ public:
 
     cocos2d::Sprite *createTopPanel();
     cocos2d::Sprite *createSongPanel(const cocos2d::Vec2 &position);
+
 
     virtual void scrollViewDidScroll(cocos2d::extension::ScrollView* view)override {};
     virtual void scrollViewDidZoom(cocos2d::extension::ScrollView* view)override {}
@@ -50,7 +53,12 @@ public:
     CREATE_FUNC(HelloWorld);
 
 public:
-    cocos2d::extension::TableView *tableView;
+    cocos2d::extension::TableView* tableView;
+
+    GRoot* _groot;
+    GComponent* _view;
+    GList* _list;
+    GComponent* _kitPanel;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

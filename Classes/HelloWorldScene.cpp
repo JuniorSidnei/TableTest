@@ -51,22 +51,35 @@ bool HelloWorld::init() {
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    // add background
-    auto bg = DrawNode::create();
-    bg->drawSolidRect(origin, visibleSize, Color4F(0.14,0.16,0.18, 1)); // 36, 43, 46
-    this->addChild(bg);
+    _groot = GRoot::create(this);
+    _groot->retain();
 
-    this->addChild(createTopPanel());
+    UIPackage::addPackage("ui/MenuKit");
+    _view = UIPackage::createObject("MenuKit", "Main")->as<GComponent>();
+    _groot->addChild(_view);
 
-    tableView = TableView::create(this, Size(828, 1472));
-    tableView->setDirection(ScrollView::Direction::VERTICAL);
-    tableView->setPosition(Vec2(50,0));
-    tableView->setTouchEnabled(true);
-    tableView->setBounceable(true);
-    tableView->setDelegate(this);
-    tableView->setVerticalFillOrder(TableView::VerticalFillOrder::TOP_DOWN);
-    this->addChild(tableView);
-    tableView->reloadData();
+    _list = _view->getChild("KitList")->as<GList>();
+
+//    // add background
+//    auto bg = DrawNode::create();
+//    bg->drawSolidRect(origin, visibleSize, Color4F(0.14,0.16,0.18, 1)); // 36, 43, 46
+//    this->addChild(bg);
+
+    //this->addChild(createTopPanel());
+
+//    tableView = TableView::create(this, Size(828, 1472));
+//    tableView->setDirection(ScrollView::Direction::VERTICAL);
+//    tableView->setPosition(Vec2(50,0));
+//    tableView->setTouchEnabled(true);
+//    tableView->setBounceable(true);
+//    tableView->setDelegate(this);
+//    tableView->setVerticalFillOrder(TableView::VerticalFillOrder::TOP_DOWN);
+//    this->addChild(tableView);
+//    tableView->reloadData();
+
+    for (int i = 0; i < 10; i++) {
+        _list->addItemFromPool();
+    }
 
     return true;
 }

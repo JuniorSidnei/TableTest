@@ -52,15 +52,15 @@ include_directories(
         Classes
         ${COCOS2DX_ROOT_PATH}/cocos/audio/include/
 )
-# add cross-platforms source files and header files 
+# add cross-platforms source files and header files
 list(APPEND GAME_SOURCE
+     Classes/AppDelegate.cpp
      Classes/HelloWorldScene.cpp
-        Classes/AppDelegate.cpp
         Classes/CustomTableViewCell.cpp
      )
 list(APPEND GAME_HEADER
+     Classes/AppDelegate.h
      Classes/HelloWorldScene.h
-        Classes/AppDelegate.h
         Classes/CustomTableViewCell.h
      )
 
@@ -116,22 +116,32 @@ elseif(APPLE)
     list(APPEND GAME_SOURCE ${common_res_files})
 endif()
 
+add_subdirectory(fairygui/libfairygui ${ENGINE_BINARY_PATH}/FairyGUI)
+
 # mark app complie info and libs info
 set(APP_SRC
     ${GAME_SOURCE}
     ${GAME_HEADER}
     )
+
+set(APP_LIBS cocos2d fairygui)
+
 cocos_build_app(${APP_NAME}
                 APP_SRC "${APP_SRC}"
-                DEPEND_COMMON_LIBS "cocos2d"
+
+                DEPEND_COMMON_LIBS "${APP_LIBS}"
                 DEPEND_ANDROID_LIBS "cocos2d_android"
-                )
+        )
+
+target_include_directories(${APP_NAME}
+                            PRIVATE
+                            fairygui/libfairygui/Classes)
 
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     if(MACOSX)
         set_target_properties(${APP_NAME} PROPERTIES
-                              MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist"
+                MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist"
                               )
     elseif(IOS)
         cocos_pak_xcode(${APP_NAME} INFO_PLIST "iOSBundleInfo.plist.in")
