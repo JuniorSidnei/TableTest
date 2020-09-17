@@ -51,6 +51,29 @@ bool HelloWorld::init() {
         return false;
     }
 
+    downloader.reset(new cocos2d::network::Downloader());
+    downloader->onDataTaskSuccess= [&](const cocos2d::network::DownloadTask& task,
+                                       std::vector<unsigned char>& data) {
+
+        auto kitSprite = _kitSpritesMap.at(task.identifier);
+
+        auto* texture =  new Texture2D();
+        if(kitSprite) {
+            do {
+            Image img;
+            if (!img.initWithImageData(data.data(), data.size())) {
+                break;
+            }
+            texture = new Texture2D();
+            if (!texture->initWithImage(&img)) {
+                break;
+            }
+            kitSprite->setTexture(texture);
+        }while (0);
+        CC_SAFE_RELEASE(texture);
+        }
+    };
+
     //request data from server
     _network.getRequest("http://api.kondzilla.opalastudios.com/api/fetch?version=4", [&](rapidjson::Document document) {
 
@@ -112,6 +135,9 @@ void HelloWorld::populateKitPanels() {
         musicName->setText(_kitData.musicName);
 
         auto spriteKit = (Sprite*) kitPanel->getChild("SpriteKit")->as<GImage>()->displayObject();
+        _kitSpritesMap.insert(_kitData.name, spriteKit);
+
+        this->downloader->createDownloadDataTask(_kitData.imgUrl, _kitData.name);
     }
 }
 

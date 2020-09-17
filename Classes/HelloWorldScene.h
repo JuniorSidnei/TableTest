@@ -63,12 +63,15 @@ public:
 
 public:
     //cocos2d::extension::TableView* tableView;
+    std::unique_ptr<cocos2d::network::Downloader> downloader;
 
     GRoot* _groot;
     GComponent* _view;
     GList* _list;
     Network _network;
     std::vector<KitData> _kitDatas;
+    std::vector<cocos2d::Sprite> _kitPanelSprites;
+    cocos2d::Map<std::string, cocos2d::Sprite*> _kitSpritesMap;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
