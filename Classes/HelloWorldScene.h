@@ -47,11 +47,10 @@ public:
 
     virtual bool init();
 
-    void onRequestComplete();
 //    cocos2d::Sprite *createTopPanel();
 //    cocos2d::Sprite *createSongPanel(const cocos2d::Vec2 &position);
 
-
+      void populateKitPanels();
 //    virtual void scrollViewDidScroll(cocos2d::extension::ScrollView* view)override {};
 //    virtual void scrollViewDidZoom(cocos2d::extension::ScrollView* view)override {}
 //    virtual void tableCellTouched(cocos2d::extension::TableView* table, cocos2d::extension::TableViewCell* cell)override;
@@ -68,7 +67,6 @@ public:
     GRoot* _groot;
     GComponent* _view;
     GList* _list;
-    GComponent* _kitPanel;
     Network _network;
     std::vector<KitData> _kitDatas;
 };

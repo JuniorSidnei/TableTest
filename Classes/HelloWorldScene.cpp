@@ -57,14 +57,15 @@ bool HelloWorld::init() {
         auto kits = document["kits"].GetArray();
 
         for(const auto& kit : kits) {
-
-            KitData _tempData;
-            _tempData.name = kit["name"].GetString();
-            _tempData.authorName = kit["authorName"].GetString();
-            _tempData.musicName = kit["musicName"].GetString();
-            _tempData.imgUrl = kit["imageUrl"].GetString();
-            _kitDatas.push_back(_tempData);
+            KitData tempData;
+            tempData.name = kit["name"].GetString();
+            tempData.authorName = kit["authorName"].GetString();
+            tempData.musicName = kit["musicName"].GetString();
+            tempData.imgUrl = kit["imageUrl"].GetString();
+            _kitDatas.push_back(tempData);
         }
+
+        populateKitPanels();
     });
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -78,7 +79,6 @@ bool HelloWorld::init() {
     _groot->addChild(_view);
 
     _list = _view->getChild("KitList")->as<GList>();
-    
 
 
 //    // add background
@@ -97,16 +97,22 @@ bool HelloWorld::init() {
 //    tableView->setVerticalFillOrder(TableView::VerticalFillOrder::TOP_DOWN);
 //    this->addChild(tableView);
 //    tableView->reloadData();
-
-    for (int i = 0; i < 10; i++) {
-        _list->addItemFromPool();
-    }
-
     return true;
 }
 
-void HelloWorld::onRequestComplete() {
+void HelloWorld::populateKitPanels() {
 
+    for (auto& _kitData : _kitDatas) {
+       auto kitPanel =  _list->addItemFromPool()->as<GComponent>();
+
+        auto authorName = kitPanel->getChild("AuthorName")->as<GTextField>();
+        authorName->setText(_kitData.authorName);
+
+        auto musicName = kitPanel->getChild("MusicName")->as<GTextField>();
+        musicName->setText(_kitData.musicName);
+
+        auto spriteKit = (Sprite*) kitPanel->getChild("SpriteKit")->as<GImage>()->displayObject();
+    }
 }
 
 //cocos2d::Sprite * HelloWorld::createSongPanel(const Vec2 &position) {
