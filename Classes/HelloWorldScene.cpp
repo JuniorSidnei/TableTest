@@ -51,27 +51,15 @@ bool HelloWorld::init() {
         return false;
     }
 
-    downloader.reset(new cocos2d::network::Downloader());
-    downloader->onDataTaskSuccess= [&](const cocos2d::network::DownloadTask& task,
-                                       std::vector<unsigned char>& data) {
+    UIObjectFactory::setLoaderExtension([](){
+       return Loader::create();
+    });
 
-        auto kitSprite = _kitSpritesMap.at(task.identifier);
+    Loader::setDownloader(new cocos2d::network::Downloader());
+    Loader::getDownloader()->onFileTaskSuccess = [&](const cocos2d::network::DownloadTask& task) {
 
-        auto* texture =  new Texture2D();
-        if(kitSprite) {
-            do {
-            Image img;
-            if (!img.initWithImageData(data.data(), data.size())) {
-                break;
-            }
-            texture = new Texture2D();
-            if (!texture->initWithImage(&img)) {
-                break;
-            }
-            kitSprite->setTexture(texture);
-        }while (0);
-        CC_SAFE_RELEASE(texture);
-        }
+        auto loaderKit = _loadersMap.at(task.identifier);
+        loaderKit->setURL(task.storagePath);
     };
 
     //request data from server
@@ -103,7 +91,6 @@ bool HelloWorld::init() {
 
     _list = _view->getChild("KitList")->as<GList>();
 
-
 //    // add background
 //    auto bg = DrawNode::create();
 //    bg->drawSolidRect(origin, visibleSize, Color4F(0.14,0.16,0.18, 1)); // 36, 43, 46
@@ -134,10 +121,10 @@ void HelloWorld::populateKitPanels() {
         auto musicName = kitPanel->getChild("MusicName")->as<GTextField>();
         musicName->setText(_kitData.musicName);
 
-        auto spriteKit = (Sprite*) kitPanel->getChild("SpriteKit")->as<GImage>()->displayObject();
-        _kitSpritesMap.insert(_kitData.name, spriteKit);
+        auto loader = kitPanel->getChild("SpriteKitLoader")->as<Loader>();
 
-        this->downloader->createDownloadDataTask(_kitData.imgUrl, _kitData.name);
+        loader->setURL(_kitData.imgUrl);
+        _loadersMap.insert(_kitData.name, loader);
     }
 }
 

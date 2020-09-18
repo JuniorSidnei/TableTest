@@ -58,12 +58,14 @@ list(APPEND GAME_SOURCE
      Classes/HelloWorldScene.cpp
         Classes/CustomTableViewCell.cpp
         Classes/Network.cpp
+        Classes/Loader.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
      Classes/HelloWorldScene.h
         Classes/CustomTableViewCell.h
         Classes/Network.h
+        Classes/Loader.h
      )
 
 if(ANDROID)
