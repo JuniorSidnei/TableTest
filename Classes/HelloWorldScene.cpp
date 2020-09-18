@@ -123,8 +123,12 @@ void HelloWorld::populateKitPanels() {
 
         auto loader = kitPanel->getChild("SpriteKitLoader")->as<Loader>();
 
+        auto imgUrl = _kitData.imgUrl;
+        std::size_t found = imgUrl.find_last_of("/\\");
+        imgUrl = imgUrl.substr(found);
+
         loader->setURL(_kitData.imgUrl);
-        _loadersMap.insert(_kitData.name, loader);
+        _loadersMap.insert(imgUrl, loader);
     }
 }
 
